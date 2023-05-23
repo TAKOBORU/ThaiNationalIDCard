@@ -86,7 +86,12 @@ namespace ThaiNationalIDCard
             Convert.ToInt32(_issue_expire.Substring(4, 2)),
             Convert.ToInt32(_issue_expire.Substring(6, 2))
         );
-
+        public DateTime IssueBE => new DateTime(
+        Convert.ToInt32(_issue_expire.Substring(0, 4)) - 543,
+        Convert.ToInt32(_issue_expire.Substring(4, 2)),
+        Convert.ToInt32(_issue_expire.Substring(6, 2))
+    );
+        public string IssueString_BE => IssueBE.ToString("yyyyMMdd");
         public DateTime Expire
         {
             get
@@ -98,15 +103,28 @@ namespace ThaiNationalIDCard
                 return new DateTime(year, month > 12 ? 12 : month, day > 31 ? 31 : day);
             }
         }
+        public DateTime ExpireBE
+        {
+            get
+            {
+                var year = Convert.ToInt32(_issue_expire.Substring(8, 4));
+                var month = Convert.ToInt32(_issue_expire.Substring(12, 2));
+                var day = Convert.ToInt32(_issue_expire.Substring(14, 2));
+
+                return new DateTime(year, month > 12 ? 12 : month, day > 31 ? 31 : day);
+            }
+        }
 
         public string ExpireString => Expire.ToString("yyyyMMdd");
+        public string ExpireString_BE => ExpireBE.ToString("yyyyMMdd");
+
 
         // Update Language version https://stackoverflow.com/a/60378136/1872200
         public DateTime? Birthday
         {
             get
             {
-                var year = Convert.ToInt32(_personal.Substring(200, 4));
+                var year = Convert.ToInt32(_personal.Substring(200, 4)) - 543;
                 var month = Convert.ToInt32(_personal.Substring(204, 2));
                 var day = Convert.ToInt32(_personal.Substring(206, 2));
 
@@ -115,6 +133,18 @@ namespace ThaiNationalIDCard
                     : null;
             }
         }
+        public string BirthdayString_BE
+        {
+            get
+            {
+                var year =_personal.Substring(200, 4).PadRight(4,'0');
+                var month = _personal.Substring(204, 2).PadRight(2,'0');
+                var day = _personal.Substring(206, 2).PadRight(2,'0');
+
+                return year+month+day;
+            }
+        }
+
 
         public string BirthdayYearString => (Convert.ToInt32(_personal.Substring(200, 4)) - 543).ToString();
 
